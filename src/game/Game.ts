@@ -10,6 +10,8 @@ export class Game {
   lastTime: number = 0;
   mouseX: number = 0;
   mouseY: number = 0;
+  enemySpawnTimer: number = 0;
+  enemySpawnInterval: number = 3000; // 3 seconds
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
@@ -44,7 +46,7 @@ export class Game {
     });
 
     this.canvas.addEventListener('click', () => {
-      this.player.attack();
+      this.player.attack(this.enemies);
     });
   }
 
@@ -64,6 +66,25 @@ export class Game {
     this.enemies.forEach(enemy => {
       enemy.update(deltaTime, this.player.x);
     });
+
+    // Remove dead enemies
+    this.enemies = this.enemies.filter(enemy => !enemy.isDead);
+
+    // Spawn new enemies
+    this.enemySpawnTimer += deltaTime * 1000;
+    if (this.enemySpawnTimer >= this.enemySpawnInterval) {
+      this.spawnEnemy();
+      this.enemySpawnTimer = 0;
+    }
+  }
+
+  spawnEnemy(): void {
+    // Randomly spawn from left or right side
+    const spawnFromLeft = Math.random() < 0.5;
+    const spawnX = spawnFromLeft ? -50 : this.canvas.width + 50;
+    const spawnY = 500;
+    
+    this.enemies.push(new Enemy(spawnX, spawnY));
   }
 
   render(): void {

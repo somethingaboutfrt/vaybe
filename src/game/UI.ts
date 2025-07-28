@@ -33,7 +33,7 @@ export class UI {
     // Enemy counter
     ctx.fillStyle = '#fff';
     ctx.font = '18px monospace';
-    ctx.fillText(`Enemies: ${enemyCount}`, 20, 70);
+    ctx.fillText(`Enemies Alive: ${enemyCount}`, 20, 70);
 
     // Game title
     ctx.fillStyle = '#4a90e2';

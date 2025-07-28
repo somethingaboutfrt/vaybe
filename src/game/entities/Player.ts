@@ -15,6 +15,7 @@ export class Player {
   weapon: Sword;
   lastAttack: number = 0;
   facing: number = 1; // 1 for right, -1 for left
+  attackRange: number = 60;
 
   constructor() {
     this.weapon = new Sword();
@@ -56,10 +57,23 @@ export class Player {
     if (this.x > 800 - this.width) this.x = 800 - this.width;
   }
 
-  attack(): void {
+  attack(enemies: any[]): void {
     const now = Date.now();
     if (now - this.lastAttack > this.weapon.cooldown) {
-      this.weapon.attack(this.x, this.y, this.facing);
+      // Check for enemies in attack range
+      const attackX = this.x + (this.facing > 0 ? this.width : -this.attackRange);
+      const attackY = this.y;
+      
+      enemies.forEach(enemy => {
+        const dx = enemy.x - attackX;
+        const dy = enemy.y - attackY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < this.attackRange) {
+          enemy.takeDamage(this.weapon.damage);
+        }
+      });
+      
       this.lastAttack = now;
     }
   }

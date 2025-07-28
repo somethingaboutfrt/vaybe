@@ -7,6 +7,7 @@ export class Enemy {
   maxHealth: number = 50;
   speed: number = 50;
   direction: number = 1;
+  isDead: boolean = false;
 
   constructor(x: number, y: number) {
     this.x = x;
@@ -25,6 +26,14 @@ export class Enemy {
 
     // Keep enemy on ground
     this.y = 500;
+  }
+
+  takeDamage(damage: number): void {
+    this.health -= damage;
+    if (this.health <= 0) {
+      this.health = 0;
+      this.isDead = true;
+    }
   }
 
   render(ctx: CanvasRenderingContext2D): void {
