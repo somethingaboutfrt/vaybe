@@ -1,4 +1,4 @@
-export abstract class BaseWeapon {
+ abstract class BaseWeapon {
   abstract name: string;
   abstract damage: number;
   abstract cooldown: number;
